@@ -26,8 +26,8 @@
                 
             }
             
-            function actionError(){
-                
+            function actionError(xhr, status, message){
+                $("#message").html("Erreur "+ status+ " : "+message)
             }
     
     
@@ -53,8 +53,8 @@
         <h1>Edition des taux de remise</h1>
             Code : <input id="code" name="code" size="1" maxlength="1" pattern="[A-Z]{1}+" title="Une lettre en MAJUSCULES"><br/>
             Taux : <input id="taux" name="taux" type="number" step="0.1" min="0.0" max="99.9" size="5"><br/>
-            <input id="doAdd" value="Ajouter">
-        <p>${message}</p>
+            <input type="submit" id="doAdd" value="Ajouter">
+        <p id="message">${message}</p>
         <table border="1">
             <tr><td>Code</td><td>Taux</td><td>Action</td></tr>
             <c:forEach var="dc" items="${Discount}">
@@ -63,7 +63,7 @@
                     <td>${dc.rate}</td>
                     <td>
                         <input type="hidden" id="ID" value="${dc.discount_code}">
-                        <input id=""doDelete value="Delete"/></td>
+                        <input type="submit" id="doDelete" value="Delete"/></td>
                 </tr>
             </c:forEach>
             
