@@ -7,9 +7,14 @@ package controlleur;
 
 import DAO.discountDAO;
 import Entitie.DiscountEntity;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -41,7 +46,26 @@ public class discount_Code_Controlleur extends HttpServlet {
 		
                 
 		request.getRequestDispatcher("view/" + jspView).forward(request, response);
-	}
+                /*
+                DataSource myDataSource = DataSourceFactory.getDataSource();
+                discountDAO dao = new discountDAO(myDataSource);
+                
+                Properties resultat = new Properties();
+                resultat.put("records", dao.findDiscountCode());
+
+		try (PrintWriter out = response.getWriter()) {
+			// On spécifie que la servlet va générer du JSON
+			response.setContentType("application/json;charset=UTF-8");
+			// Générer du JSON
+			// Gson gson = new Gson();
+			// setPrettyPrinting pour que le JSON généré soit plus lisible
+			
+                        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			String gsonData = gson.toJson(resultat);
+			out.println(gsonData);
+		}*/
+
+        }
         
            
         protected void processPostRequest(HttpServletRequest request, HttpServletResponse response)

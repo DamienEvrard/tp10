@@ -8,9 +8,13 @@ package servlet;
 import controlleur.*;
 import DAO.discountDAO;
 import Entitie.DiscountEntity;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -30,19 +34,21 @@ public class discount_Code_Disp extends HttpServlet {
 
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
-		String jspView;
-                
-                DataSource myDataSource = DataSourceFactory.getDataSource();
+		DataSource myDataSource = DataSourceFactory.getDataSource();
                 discountDAO dao = new discountDAO(myDataSource);
-		
-                ArrayList<DiscountEntity> listeDiscount =dao.findDiscountCode();
-                request.setAttribute("Discount", listeDiscount);
                 
-                jspView = "afficheDiscount.jsp";
-		
-                
-		request.getRequestDispatcher("view/" + jspView).forward(request, response);
-	}
+                Properties resultat = new Properties();
+                resultat.put("records", dao.findDiscountCode());
+
+		try (PrintWriter out = response.getWriter()) {
+			
+                        response.setContentType("application/json;charset=UTF-8");
+			
+                        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			String gsonData = gson.toJson(resultat);
+			out.println(gsonData);
+		}
+        }
         
            
  

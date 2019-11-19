@@ -14,31 +14,44 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"/>
         <script>
             $(document).ready(
-                    function(){$("#doDelete").click(supr)}
-            function(){$("#doAdd").click(add)}
+                    function(){
+                               fillTab()
+                               $("#doDelete").click(supr)
+                               $("#doAdd").click(add)}
             );
-                    function fillStateSelector() {
-                    // On fait un appel AJAX pour chercher les états existants
+                    function fillTab() {
+                   
                     $.ajax({
-                    url: "statesInJSON",
+                    url: "discount_disp",
                             dataType: "json",
                             error: actionError,
-                            success: // La fonction qui traite les résultats
+                            success: 
                             function(result) {
-                                    // Pour chaque état dans le résultat
+                                    var tableau = ${'table'};
                                     $.each(result.records,
-                                            function(stateIndex) {
-                                            // On ajoute une option dans le select
-                                            var stateCode = result.records[stateIndex];
-                                                    var option = new Option(stateCode, stateCode);
-                                                    //var option = new Option(stateCode, stateCode, stateIndex === 0, stateIndex === 0);
-                                                    select.append($(option));
+                                            function(discount_codeIndex) {
+                                            
+                                            var dc = result.records[discount_code];
+                                            var rate = result.records[rate];
+                                            var row = "<tr><td>"+dc+"</td><td>"+rate+"</td></tr>";
+                                            tableau.append(row);
                                             }
                                     );
-                                    // On initialise l'affichage 
-                                    showCustomersInState();
+                                    
+                                    showTab();
                             }
                     });
+                    }
+                    function showtab() {	
+				$.ajax({
+					url: "discount",
+					dataType: "json",
+						function(result) {
+                                                    $("#table").empty();
+                                                    $.jsontotable(result.records, {id: "#table", header: false});
+						},
+					error: showError
+				});
                     }
 
             function actionSupr(){
@@ -59,14 +72,15 @@
 
 
             function supr(){
+                var ID= $
             $.ajax({
-            url: "afficheDiscount",
-                    data: { "state" : "delete" },
+            url: "Discount_Del",
+                    data: { "id" : ID },
                     dataType: "json",
                     success:
                     function(result) {
-                    $("#customers").empty();
-                            $.jsontotable(result.records, {id: "#customers", header: false});
+                    $("#id").empty();
+                            $.jsontotable(result.records, {id: "#id", header: false});
                     },
                     error: actionError
             });
@@ -75,7 +89,7 @@
 
             function add(){
             $.ajax({
-            url: "afficheDiscount",
+            url: "Discount_Add",
                     data: { "state" : "add" },
                     dataType: "json",
                     success: actionAdd,
@@ -92,7 +106,7 @@
         Taux : <input id="taux" name="taux" type="number" step="0.1" min="0.0" max="99.9" size="5"><br/>
         <input type="submit" id="doAdd" value="Ajouter">
         <p id="message">${message}</p>
-        <table border="1">
+        <table border="1" id="table">
             <tr><td>Code</td><td>Taux</td><td>Action</td></tr>
             <c:forEach var="dc" items="${Discount}">
                 <tr>
